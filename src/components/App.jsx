@@ -1,4 +1,6 @@
+import { requestFilms } from 'Api';
 export const App = () => {
+  requestFilms();
   return (
     <div
       style={{
@@ -7,7 +9,7 @@ export const App = () => {
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 40,
-        color: '#010101'
+        color: '#010101',
       }}
     >
       React homework template
