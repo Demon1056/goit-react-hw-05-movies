@@ -1,14 +1,17 @@
-import { Outlet } from "react-router-dom"
-import { HeaderText } from "./LayoutStyled"
-import { Container } from "./LayoutStyled"
-import { Header } from "./LayoutStyled"
-const Layout = () => {
+import { Outlet } from 'react-router-dom';
+import { Container, Header, NavItem, Nav } from './LayoutStyled';
 
-    return (
-        <Container>
-            <Header>
-                <HeaderText>Home</HeaderText>
-                <HeaderText>Movies</HeaderText>
-            </Header> <Outlet /></Container>)
-}
-export default Layout
+const Layout = () => {
+  return (
+    <Container>
+      <Header>
+        <Nav>
+          <NavItem to="/">Home</NavItem>
+          <NavItem to="/movies">Movies</NavItem>
+        </Nav>
+      </Header>{' '}
+      <Outlet />
+    </Container>
+  );
+};
+export default Layout;

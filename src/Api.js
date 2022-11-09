@@ -22,10 +22,16 @@ import axios from 'axios';
 export async function getTrendingFilms() {
   try {
     const BASEURL =
-      'https://api.themoviedb.org/3/trending/movie/week?api_key=ab65a3b7f95e2242fd03de7b330288b7';
+      'https://api.themoviedb.org/3/trending/movie/day?api_key=ab65a3b7f95e2242fd03de7b330288b7';
     const response = await axios.get(BASEURL);
-    const trendingFilms = response.data.results
-    return trendingFilms
+    const trendingFilms = response.data.results;
+    const trendingFilmsTitle = trendingFilms.map(({ title, id }) => {
+      return {
+        title,
+        id,
+      };
+    });
+    return trendingFilmsTitle;
   } catch (error) {
     console.log(error);
   }
