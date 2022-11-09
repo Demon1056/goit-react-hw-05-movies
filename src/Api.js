@@ -19,12 +19,13 @@ import axios from 'axios';
 //     console.log(error);
 //   }
 // }
-export async function requestFilms() {
+export async function getTrendingFilms() {
   try {
     const BASEURL =
       'https://api.themoviedb.org/3/trending/movie/week?api_key=ab65a3b7f95e2242fd03de7b330288b7';
     const response = await axios.get(BASEURL);
-    return console.log(response);
+    const trendingFilms = response.data.results
+    return trendingFilms
   } catch (error) {
     console.log(error);
   }

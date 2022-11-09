@@ -1,18 +1,14 @@
-import { requestFilms } from 'Api';
+import { Routes, Route } from "react-router-dom";
+import { getTrendingFilms } from 'Api';
+import Layout from './Layout/Layout';
+import Home from "pages/Home/Home";
+import Movies from "pages/Movies/Movies";
 export const App = () => {
-  requestFilms();
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      React homework template
-    </div>
-  );
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={< Home getTrendingFilms={getTrendingFilms} />} />
+        <Route path="movies" element={< Movies />} />
+      </Route>
+    </Routes>)
 };
