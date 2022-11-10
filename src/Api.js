@@ -36,3 +36,21 @@ export async function getTrendingFilms() {
     console.log(error);
   }
 }
+export async function getSearchFilm(e) {
+  e.preventDefault()
+  try {
+    const BASEURL =
+      'https://api.themoviedb.org/3/search/keyword?api_key=ab65a3b7f95e2242fd03de7b330288b7&query=home&page=1';
+    const response = await axios.get(BASEURL);
+    const trendingFilms = response.data.results;
+    const trendingFilmsName = trendingFilms.map(({ name, id }) => {
+      return {
+        name,
+        id,
+      };
+    });
+    return trendingFilmsName
+  } catch (error) {
+    console.log(error);
+  }
+}
