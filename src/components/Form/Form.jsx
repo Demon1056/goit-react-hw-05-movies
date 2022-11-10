@@ -1,11 +1,21 @@
-import { Form, FormButton, FormInput } from "./FormStyles";
-import { getSearchFilm } from "Api"
-export const FindForm = () => {
-    return (<><Form onSubmit={(e) => { getSearchFilm(e)}}> <FormInput /><FormButton type="submit">Search</FormButton></Form></>)
-}
+import { Form, FormButton, FormInput } from './FormStyles';
 
-
-
+export const FindForm = ({ handleChange }) => {
+  return (
+    <>
+      <Form
+        onSubmit={e => {
+          e.preventDefault();
+          handleChange(e.target[0].value);
+        }}
+      >
+        {' '}
+        <FormInput />
+        <FormButton type="submit">Search</FormButton>
+      </Form>
+    </>
+  );
+};
 
 // export const Searchbar = ({ changeInputValue }) => {
 //     const [inputValue, setInputValue] = useState('');
@@ -36,6 +46,6 @@ export const FindForm = () => {
 //                 onChange={handleChange}
 //             />
 //         </SearchForm>{ ' ' }
-       
+
 //     );
 // };
