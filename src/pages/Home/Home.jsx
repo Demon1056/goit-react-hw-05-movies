@@ -10,7 +10,6 @@ const Home = ({ getTrendingFilms }) => {
       console.log(films);
     }
     updateTrendingFilms();
-
   }, []);
   return (
     <>
@@ -18,7 +17,7 @@ const Home = ({ getTrendingFilms }) => {
       <ul>
         {trendingFilms.map(({ title, id }) => (
           <li key={id}>
-            <Link to={'/movies'}>{title}</Link>
+            <Link to={`/movies/${id}`}>{title}</Link>
           </li>
         ))}
       </ul>

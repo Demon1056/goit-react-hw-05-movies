@@ -36,19 +36,39 @@ export async function getTrendingFilms() {
     console.log(error);
   }
 }
-export async function getSearchFilms() {
+export async function getSearchFilms(name) {
   try {
-    const BASEURL =
-      'https://api.themoviedb.org/3/search/keyword?api_key=ab65a3b7f95e2242fd03de7b330288b7&query=home&page=1';
+    const BASEURL = `https://api.themoviedb.org/3/search/movie?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US&query=${name}&page=1&include_adult=false`;
     const response = await axios.get(BASEURL);
+    console.log(response);
     const trendingFilms = response.data.results;
-    const trendingFilmsName = trendingFilms.map(({ name, id }) => {
+    const trendingFilmsName = trendingFilms.map(({ title, id }) => {
       return {
-        name,
+        title,
         id,
       };
     });
     return trendingFilmsName;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getFilmsById(filmId) {
+  try {
+    const BASEURL = `https://api.themoviedb.org/3/movie/${filmId}?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US`;
+    const response = await axios.get(BASEURL);
+    console.log(response.data);
+    const { poster_path, title, release_date, vote_average, overview, genres } =
+      response.data;
+    return {
+      poster_path,
+      title,
+      release_date,
+      vote_average,
+      overview,
+      genres,
+    };
   } catch (error) {
     console.log(error);
   }
