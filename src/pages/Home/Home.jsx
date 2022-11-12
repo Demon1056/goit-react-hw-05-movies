@@ -7,7 +7,6 @@ const Home = ({ getTrendingFilms }) => {
     async function updateTrendingFilms() {
       const films = await getTrendingFilms();
       setTrendingFilms(films);
-      console.log(films);
     }
     updateTrendingFilms();
   }, []);

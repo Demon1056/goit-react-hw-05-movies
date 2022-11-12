@@ -1,6 +1,7 @@
 import { NavItem } from 'components/Layout/LayoutStyled';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const MovieDetails = ({ filmsRequest }) => {
   const [films, setFilms] = useState(null);
@@ -9,12 +10,14 @@ const MovieDetails = ({ filmsRequest }) => {
     async function getDatail() {
       const detail = await filmsRequest(movieId);
       setFilms(detail);
-      // const a = films.geners.map(({ name }) => name);
-
-      console.log(films);
     }
     getDatail();
   }, [movieId]);
+
+  const getGenres = detail => {
+    const genres = detail.genres.map(({ name }) => name);
+    return genres.join(', ');
+  };
 
   return (
     <>
@@ -35,12 +38,23 @@ const MovieDetails = ({ filmsRequest }) => {
             <p>{films.overview}</p>
             <p>Genres</p>
             <br />
-            <p>{}</p>
+            <p>{getGenres(films)}</p>
           </div>
+          <div>
+            <p>Additional Information</p>
+            <ul>
+              <li>
+                <Link to={`/movies/${films.id}/cast`}>Cast</Link>
+              </li>
+              <li>
+                <Link to={`/movies/${films.id}/reviews`}>Reviews</Link>
+              </li>
+            </ul>
+          </div>
+          <Outlet />
         </div>
       )}
     </>
   );
 };
 export default MovieDetails;
-// { poster_path, title, release_date, popularity, overview, genres }

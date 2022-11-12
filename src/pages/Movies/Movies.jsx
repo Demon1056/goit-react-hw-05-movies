@@ -14,7 +14,6 @@ const Movies = ({ getFilmsByName }) => {
         return;
       }
       const filmsArray = await getFilmsByName(filmName);
-      console.log(filmsArray);
       setFilms(filmsArray);
     }
     requestFilmsByName();
