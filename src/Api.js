@@ -1,91 +1,57 @@
 import axios from 'axios';
 
-// export async function searchFilms() {
-//   try {
-//     const BASEURL = 'https://pixabay.com/api/';
-//     let requestParams = {
-//       params: {
-//         q: value,
-//         page: currentPage,
-//         key: '29803921-0264c7261e6b7092956a87835',
-//         image_type: 'photo',
-//         orientation: 'horizontal',
-//         per_page: 12,
-//       },
-//     };
-//     const response = await axios.get(BASEURL, requestParams);
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-export async function getTrendingFilms() {
+const BASEURLD = `https://api.themoviedb.org/3/`;
+const KEY = `api_key=ab65a3b7f95e2242fd03de7b330288b7`;
+
+export async function requestTrendingFilms() {
   try {
-    const BASEURL =
-      'https://api.themoviedb.org/3/trending/movie/day?api_key=ab65a3b7f95e2242fd03de7b330288b7';
-    const response = await axios.get(BASEURL);
-    const trendingFilms = response.data.results;
-    const trendingFilmsTitle = trendingFilms.map(({ title, id }) => {
+    const { data } = await axios.get(`${BASEURLD}trending/movie/day?${KEY}`);
+    const trendingFilms = data.results.map(({ title, id }) => {
       return {
         title,
         id,
       };
     });
-    return trendingFilmsTitle;
+    return trendingFilms;
   } catch (error) {
     console.log(error);
   }
 }
-export async function getSearchFilms(name) {
+
+export async function requestSearchFilms(name) {
   try {
-    const BASEURL = `https://api.themoviedb.org/3/search/movie?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US&query=${name}&page=1&include_adult=false`;
-    const response = await axios.get(BASEURL);
-    const trendingFilms = response.data.results;
-    const trendingFilmsName = trendingFilms.map(({ title, id }) => {
+    const { data } = await axios.get(
+      `${BASEURLD}search/movie?${KEY}&language=en-US&query=${name}&page=1&include_adult=false`
+    );
+    const searchFilms = data.results.map(({ title, id }) => {
       return {
         title,
         id,
       };
     });
-    return trendingFilmsName;
+    return searchFilms;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getFilmsById(filmId) {
+export async function requestMoviesDatails(moviesId) {
   try {
-    const BASEURL = `https://api.themoviedb.org/3/movie/${filmId}?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US`;
-    const response = await axios.get(BASEURL);
-    const {
-      poster_path,
-      title,
-      release_date,
-      vote_average,
-      overview,
-      genres,
-      id,
-    } = response.data;
-    return {
-      poster_path,
-      title,
-      release_date,
-      vote_average,
-      overview,
-      genres,
-      id,
-    };
+    const { data } = await axios.get(
+      `${BASEURLD}movie/${moviesId}?${KEY}&language=en-US`
+    );
+    return data;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getCast(id) {
+export async function requestMoviesCast(id) {
   try {
-    const BASEURL = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US`;
-    const response = await axios.get(BASEURL);
-    const cast = response.data.cast;
-    const castInformation = cast.map(
+    const { data } = await axios.get(
+      `${BASEURLD}movie/${id}/credits?${KEY}&language=en-US`
+    );
+    const castsInformation = data.cast.map(
       ({ character, name, profile_path, id }) => {
         return {
           character,
@@ -95,25 +61,25 @@ export async function getCast(id) {
         };
       }
     );
-    return castInformation;
+    return castsInformation;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function getReviews(id) {
+export async function requestMoviesReviews(id) {
   try {
-    const BASEURL = `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=ab65a3b7f95e2242fd03de7b330288b7&language=en-US&page=1`;
-    const response = await axios.get(BASEURL);
-    const a = response.data.results.map(({ author, content, id }) => {
+    const response = await axios.get(
+      `${BASEURLD}movie/${id}/reviews?${KEY}&language=en-US&page=1`
+    );
+    const reviews = response.data.results.map(({ author, content, id }) => {
       return {
         id,
         author,
         content,
       };
     });
-
-    return a;
+    return reviews;
   } catch (error) {
     console.log(error);
   }

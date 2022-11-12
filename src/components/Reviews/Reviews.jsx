@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { requestMoviesReviews } from 'Api';
 
-const Reviews = ({ getReviews }) => {
-  const [reviews, setReviews] = useState();
-  useEffect(() => {
-    async function requestReviews() {
-      const review = await getReviews(movieId);
-      setReviews(review);
-    }
-    requestReviews();
-  }, []);
+const Reviews = () => {
+  const [moviesReviews, setmoviesReviews] = useState();
   const { movieId } = useParams();
-  const createMarcketReviews = reviews => {
-    const a = reviews.map(({ id, author, content }) => {
+
+  useEffect(() => {
+    async function updateMoviesReviews() {
+      const reviews = await requestMoviesReviews(movieId);
+      setmoviesReviews(reviews);
+    }
+    updateMoviesReviews();
+  }, [movieId]);
+
+  const createReviewsMarkup = moviesReviews => {
+    const markup = moviesReviews.map(({ id, author, content }) => {
       return (
         <li key={id}>
           <p>{author}</p>
@@ -20,9 +23,18 @@ const Reviews = ({ getReviews }) => {
         </li>
       );
     });
-    return a;
+    return markup;
   };
 
-  return <>{reviews && <div>{createMarcketReviews(reviews)}</div>}</>;
+  return (
+    <>
+      {moviesReviews && moviesReviews.length > 0 ? (
+        <div>{createReviewsMarkup(moviesReviews)}</div>
+      ) : (
+        <p>Non reviews</p>
+      )}
+    </>
+  );
 };
+
 export default Reviews;

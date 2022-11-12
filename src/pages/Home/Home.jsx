@@ -1,26 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-const Home = ({ getTrendingFilms }) => {
-  const [trendingFilms, setTrendingFilms] = useState([]);
+import { requestTrendingFilms } from 'Api';
+import { FilmList } from 'components/FilmList/FilmList';
+
+const Home = () => {
+  const [filmsNames, setFilmsNames] = useState([]);
 
   useEffect(() => {
-    async function updateTrendingFilms() {
-      const films = await getTrendingFilms();
-      setTrendingFilms(films);
+    async function updateFilmsNames() {
+      const names = await requestTrendingFilms();
+      setFilmsNames(names);
     }
-    updateTrendingFilms();
+    updateFilmsNames();
   }, []);
+
   return (
-    <>
+    <div>
       <h2>Trending today</h2>
-      <ul>
-        {trendingFilms.map(({ title, id }) => (
-          <li key={id}>
-            <Link to={`/movies/${id}`}>{title}</Link>
-          </li>
-        ))}
-      </ul>
-    </>
+      <FilmList filmsNames={filmsNames} />
+    </div>
   );
 };
 export default Home;

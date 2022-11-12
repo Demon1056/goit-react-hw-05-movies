@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { requestMoviesCast } from 'Api';
 
-const Cast = ({ requestCast }) => {
+const Cast = () => {
   const [cast, setCast] = useState(null);
-  useEffect(() => {
-    async function gerCast() {
-      const c = await requestCast(movieId);
-      setCast(c);
-    }
-    gerCast();
-  }, []);
   const { movieId } = useParams();
-  const createMarcketCast = cast => {
-    const a = cast.map(({ name, character, id, profile_path }) => {
+
+  useEffect(() => {
+    async function UpdateCast() {
+      const castsInformation = await requestMoviesCast(movieId);
+      setCast(castsInformation);
+    }
+    UpdateCast();
+  }, [movieId]);
+
+  const createCastMarkup = cast => {
+    const markup = cast.map(({ name, character, id, profile_path }) => {
       return (
         <li key={id}>
           <img
@@ -24,8 +27,8 @@ const Cast = ({ requestCast }) => {
         </li>
       );
     });
-    return a;
+    return markup;
   };
-  return <>{cast && <div>{createMarcketCast(cast)}</div>}</>;
+  return <>{cast && <div>{createCastMarkup(cast)}</div>}</>;
 };
 export default Cast;

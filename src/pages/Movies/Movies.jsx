@@ -1,23 +1,27 @@
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { FindForm } from 'components/Form/Form';
 import { useEffect, useState } from 'react';
+import { requestSearchFilms } from 'Api';
+import { FilmList } from 'components/FilmList/FilmList';
 
-const Movies = ({ getFilmsByName }) => {
+const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [films, setFilms] = useState(null);
-  const filmName = searchParams.get('name') ?? '';
+  const [filmsNames, setFilmsNames] = useState(null);
+  const value = searchParams.get('name') ?? '';
 
   useEffect(() => {
-    async function requestFilmsByName() {
-      if (!filmName) {
-        setFilms(null);
+    async function updateFilmsNames() {
+      if (!value) {
+        setFilmsNames(null);
         return;
       }
-      const filmsArray = await getFilmsByName(filmName);
-      setFilms(filmsArray);
+      const filmsArray = await requestSearchFilms(value);
+      setFilmsNames(filmsArray);
     }
-    requestFilmsByName();
-  }, [filmName]);
+
+    updateFilmsNames();
+  }, [value]);
+
   const updateQueryString = name => {
     const nextParams = name !== '' ? { name } : {};
     setSearchParams(nextParams);
@@ -27,15 +31,7 @@ const Movies = ({ getFilmsByName }) => {
     <>
       <h2>Find movies</h2>
       <FindForm handleChange={updateQueryString} />
-      {films && (
-        <ul>
-          {films.map(({ title, id }) => (
-            <li key={id}>
-              <Link to={`/movies/${id}`}>{title}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {filmsNames && <FilmList filmsNames={filmsNames} />}
     </>
   );
 };
