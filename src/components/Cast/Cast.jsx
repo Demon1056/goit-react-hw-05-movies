@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { requestMoviesCast } from 'Api';
-
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const Cast = () => {
   const [cast, setCast] = useState(null);
   const { movieId } = useParams();
 
   useEffect(() => {
     async function UpdateCast() {
-      const castsInformation = await requestMoviesCast(movieId);
-      setCast(castsInformation);
+      try {
+        Loading.arrows({ svgColor: ' rosybrown' });
+        const castsInformation = await requestMoviesCast(movieId);
+        setCast(castsInformation);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        Loading.remove();
+      }
     }
     UpdateCast();
   }, [movieId]);

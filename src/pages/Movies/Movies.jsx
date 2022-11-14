@@ -3,6 +3,8 @@ import { FindForm } from 'components/Form/Form';
 import { useEffect, useState } from 'react';
 import { requestSearchFilms } from 'Api';
 import { FilmList } from 'components/FilmList/FilmList';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
 const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,12 +13,22 @@ const Movies = () => {
 
   useEffect(() => {
     async function updateFilmsNames() {
-      if (!value) {
-        setFilmsNames(null);
-        return;
+      try {
+        if (!value) {
+          setFilmsNames(null);
+          return;
+        }
+        Loading.arrows({ svgColor: ' rosybrown' });
+        const filmsArray = await requestSearchFilms(value);
+        if (filmsArray.length === 0) {
+          Notify.failure("We didn't find any movies");
+        }
+        setFilmsNames(filmsArray);
+      } catch (error) {
+        console.error();
+      } finally {
+        Loading.remove();
       }
-      const filmsArray = await requestSearchFilms(value);
-      setFilmsNames(filmsArray);
     }
 
     updateFilmsNames();

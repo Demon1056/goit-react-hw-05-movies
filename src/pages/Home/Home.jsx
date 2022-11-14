@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react';
 import { requestTrendingFilms } from 'Api';
 import { FilmList } from 'components/FilmList/FilmList';
-
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const Home = () => {
   const [filmsNames, setFilmsNames] = useState([]);
 
   useEffect(() => {
     async function updateFilmsNames() {
-      const names = await requestTrendingFilms();
-      setFilmsNames(names);
+      try {
+        Loading.arrows({ svgColor: ' rosybrown' });
+        const names = await requestTrendingFilms();
+        setFilmsNames(names);
+      } catch (error) {
+        console.error();
+      } finally {
+        Loading.remove();
+      }
     }
     updateFilmsNames();
   }, []);

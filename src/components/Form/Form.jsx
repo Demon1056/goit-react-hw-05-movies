@@ -1,12 +1,17 @@
 import { Form, FormButton, FormInput } from './FormStyles';
-
+import { Notify } from 'notiflix';
 export const FindForm = ({ handleChange }) => {
   return (
     <>
       <Form
         onSubmit={e => {
+          let value = e.target[0].value;
           e.preventDefault();
-          handleChange(e.target[0].value);
+          handleChange(value);
+          if (!value) {
+            Notify.info('Please enter the name of the movie');
+          }
+          e.target[0].value = '';
         }}
       >
         {' '}
@@ -16,36 +21,3 @@ export const FindForm = ({ handleChange }) => {
     </>
   );
 };
-
-// export const Searchbar = ({ changeInputValue }) => {
-//     const [inputValue, setInputValue] = useState('');
-//     const resetForm = () => setInputValue('');
-//     const handleChange = e => setInputValue(e.target.value);
-//     const handleSubmit = e => {
-//         e.preventDefault();
-//         changeInputValue(inputValue);
-//         resetForm();
-//     };
-
-//     return (
-
-//         <SearchForm onSubmit={handleSubmit}>
-//             <SearchFormButton type="submit">
-//                 {' '}
-//                 <AiOutlineSearch color={'grey'} size={'20px'} />
-//                 <SearchFormButtonLabel></SearchFormButtonLabel>
-//             </SearchFormButton>
-
-//             <SearchFormInput
-//                 name="findValue"
-//                 value={inputValue}
-//                 type="text"
-//                 autocomplete="off"
-//                 autoFocus
-//                 placeholder="Search images and photos"
-//                 onChange={handleChange}
-//             />
-//         </SearchForm>{ ' ' }
-
-//     );
-// };

@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Container, Header, NavItem, Nav } from './LayoutStyled';
 
@@ -10,7 +11,9 @@ const Layout = () => {
           <NavItem to="/movies">Movies</NavItem>
         </Nav>
       </Header>{' '}
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </Container>
   );
 };
