@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 export const AdditionalInfo = ({ filmsDatails }) => {
   const { id } = filmsDatails;
   const location = useLocation();
+
   return (
     <div>
       <h3>Additional Information</h3>
@@ -24,4 +26,8 @@ export const AdditionalInfo = ({ filmsDatails }) => {
       </ul>
     </div>
   );
+};
+
+AdditionalInfo.propTypes = {
+  filmsDatails: PropTypes.object.isRequired,
 };

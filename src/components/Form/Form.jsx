@@ -1,5 +1,7 @@
-import { Form, FormButton, FormInput } from './FormStyles';
+import PropTypes from 'prop-types';
 import { Notify } from 'notiflix';
+import { Form, FormButton, FormInput } from './FormStyles';
+
 export const FindForm = ({ handleChange }) => {
   return (
     <>
@@ -20,4 +22,8 @@ export const FindForm = ({ handleChange }) => {
       </Form>
     </>
   );
+};
+
+FindForm.propTypes = {
+  handleChange: PropTypes.func.isRequired,
 };

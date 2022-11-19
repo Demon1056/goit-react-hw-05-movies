@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import { requestTrendingFilms } from 'Api';
 import { FilmList } from 'components/FilmList/FilmList';
-import { Loading } from 'notiflix/build/notiflix-loading-aio';
+
 const Home = () => {
   const [filmsNames, setFilmsNames] = useState([]);
 
   useEffect(() => {
+    const controller = new AbortController();
     async function updateFilmsNames() {
       try {
         Loading.arrows({ svgColor: ' rosybrown' });
-        const names = await requestTrendingFilms();
+        const names = await requestTrendingFilms(controller.signal);
         setFilmsNames(names);
       } catch (error) {
         console.error();
@@ -18,12 +20,15 @@ const Home = () => {
       }
     }
     updateFilmsNames();
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
     <div>
       <h2>Trending today</h2>
-      <FilmList filmsNames={filmsNames} />
+      {filmsNames && <FilmList filmsNames={filmsNames} />}
     </div>
   );
 };

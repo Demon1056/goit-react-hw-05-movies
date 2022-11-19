@@ -8,6 +8,7 @@ export const Header = styled.header`
   border-bottom: 1px solid grey;
   box-shadow: 0px 1px grey;
   padding: 5px;
+  margin-bottom: 20px;
 `;
 
 export const Nav = styled.nav`

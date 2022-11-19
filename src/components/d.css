@@ -1,5 +1,3 @@
-.a {
-    border-color: aqua;
-    margin-right: 5px;
-
+.a :not(){justify-content: center;
+ 
 }

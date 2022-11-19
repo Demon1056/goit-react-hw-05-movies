@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { requestMoviesReviews } from 'Api';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { requestMoviesReviews } from 'Api';
+
 const Reviews = () => {
   const [moviesReviews, setMoviesReviews] = useState();
   const { movieId } = useParams();
 
   useEffect(() => {
+    const controller = new AbortController();
     async function updateMoviesReviews() {
       try {
         Loading.arrows({ svgColor: ' rosybrown' });
-        const reviews = await requestMoviesReviews(movieId);
+        const reviews = await requestMoviesReviews(movieId, controller.signal);
         setMoviesReviews(reviews);
         if (reviews.length === 0) {
           Notify.info("Nobody didn't write review for this movie");
@@ -23,6 +25,9 @@ const Reviews = () => {
       }
     }
     updateMoviesReviews();
+    return () => {
+      controller.abort();
+    };
   }, [movieId]);
 
   const createReviewsMarkup = moviesReviews => {

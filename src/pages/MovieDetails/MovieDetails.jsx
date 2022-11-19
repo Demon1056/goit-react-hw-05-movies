@@ -1,10 +1,11 @@
-import { NavItem } from 'components/Layout/LayoutStyled';
 import { Suspense, useEffect, useState } from 'react';
 import { useParams, Outlet, useLocation } from 'react-router-dom';
-import { requestMoviesDatails } from 'Api';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import { MainDatails } from 'components/MainDatails/MainDatails';
 import { AdditionalInfo } from 'components/AdditionalInfo/AdditionalInfo';
-import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { GoBackLink } from './MovieDatails.Styled';
+import { requestMoviesDatails } from 'Api';
+
 const MovieDetails = () => {
   const [filmsDatails, setFilmsDatails] = useState(null);
   const { movieId } = useParams();
@@ -12,10 +13,11 @@ const MovieDetails = () => {
   const backLink = location.state?.from ?? '/';
 
   useEffect(() => {
+    const controller = new AbortController();
     async function updateFilmsDatails() {
       try {
         Loading.arrows({ svgColor: ' rosybrown' });
-        const details = await requestMoviesDatails(movieId);
+        const details = await requestMoviesDatails(movieId, controller.signal);
         setFilmsDatails(details);
       } catch (error) {
         console.error();
@@ -24,11 +26,14 @@ const MovieDetails = () => {
       }
     }
     updateFilmsDatails();
+    return () => {
+      controller.abort();
+    };
   }, [movieId]);
 
   return (
     <>
-      <NavItem to={backLink}>Go back</NavItem>
+      <GoBackLink to={backLink}>Go back</GoBackLink>
       {filmsDatails && (
         <div>
           {' '}
@@ -42,4 +47,5 @@ const MovieDetails = () => {
     </>
   );
 };
+
 export default MovieDetails;

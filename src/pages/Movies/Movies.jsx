@@ -1,9 +1,9 @@
 import { useSearchParams } from 'react-router-dom';
 import { FindForm } from 'components/Form/Form';
 import { useEffect, useState } from 'react';
-import { requestSearchFilms } from 'Api';
 import { FilmList } from 'components/FilmList/FilmList';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { requestSearchFilms } from 'Api';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
 const Movies = () => {
@@ -12,15 +12,15 @@ const Movies = () => {
   const value = searchParams.get('name') ?? '';
 
   useEffect(() => {
+    const controller = new AbortController();
     async function updateFilmsNames() {
       try {
         if (!value) {
-          setFilmsNames(null);
-          return;
+          return setFilmsNames(null);
         }
         Loading.arrows({ svgColor: ' rosybrown' });
-        const filmsArray = await requestSearchFilms(value);
-        if (filmsArray.length === 0) {
+        const filmsArray = await requestSearchFilms(value, controller.signal);
+        if (filmsArray.length === 0 && value) {
           Notify.failure("We didn't find any movies");
         }
         setFilmsNames(filmsArray);
@@ -30,8 +30,10 @@ const Movies = () => {
         Loading.remove();
       }
     }
-
     updateFilmsNames();
+    return () => {
+      controller.abort();
+    };
   }, [value]);
 
   const updateQueryString = name => {
@@ -47,4 +49,5 @@ const Movies = () => {
     </>
   );
 };
+
 export default Movies;
